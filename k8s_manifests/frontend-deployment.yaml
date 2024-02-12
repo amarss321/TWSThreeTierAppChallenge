@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: public.ecr.aws/h3m8z1j3/frontend1
+        image: amarnathvenkatam/frontend:replaceImageTag
         imagePullPolicy: Always
         env:
           - name: REACT_APP_BACKEND_URL
