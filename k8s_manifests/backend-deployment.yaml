@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: public.ecr.aws/h3m8z1j3/backend1
+        image: amarnathvenkatam/backend:replaceImageTag
         imagePullPolicy: Always
         env:
           - name: MONGO_CONN_STR
