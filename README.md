@@ -1,5 +1,5 @@
 #https://medium.com/@sushantkapare1717/ci-cd-3-tier-todo-application-f92a8d63172a
-
+# error solving for alb no connection error refer https://rtfm.co.ua/en/argocd-an-overview-ssl-configuration-and-an-application-deploy/
 # #TWSThreeTierAppChallenge
 
 ## Overview
