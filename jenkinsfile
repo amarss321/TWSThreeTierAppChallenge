@@ -5,14 +5,7 @@ pipeline {
         SCANNER_HOME=tool 'sonar-scanner'
 
         YOUR_EMAIL_ID = 'malasanivenkataamarnath@gmail.com'
-
-        AWS_ACCOUNT_ID = credentials('ACCOUNT_ID')
-        AWS_ECR_BACKEND_REPO_NAME = credentials('ECR_REPO2')
-        AWS_ECR_FRONTFRONT_REPO_NAME = credentials('ECR_REPO1')
-        AWS_DEFAULT_REGION = 'us-east-1' //your Region
-        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
-
-        GIT_REPO_NAME = "ThreeTierAppToDoApp"
+        GIT_REPO_NAME = "TWSThreeTierAppChallenge"
         GIT_USER_NAME = credentials('GIT_USER_NAME')
 
         TIMESTAMP = sh(script: 'date "+%Y-%m-%d_%H-%M-%S"', returnStdout: true).trim()
@@ -59,7 +52,7 @@ pipeline {
             steps{
                 script{
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        dir('/root/.jenkins/workspace/venkata/frontend') {
+                        dir('/root/.jenkins/workspace/end-to-end-devops-ci/frontend') {
                             sh 'docker build -t amarnathvenkatam/frontend:${BUILD_NUMBER} .'
                             sh "docker push amarnathvenkatam/frontend:${BUILD_NUMBER}"
                             sh "docker rmi amarnathvenkatam/frontend:${BUILD_NUMBER}"
@@ -72,7 +65,7 @@ pipeline {
             steps{
                 script{
                     withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        dir('/root/.jenkins/workspace/venkata/backend') {
+                        dir('/root/.jenkins/workspace/end-to-end-devops-ci/backend') {
                             sh 'docker build -t amarnathvenkatam/backend:${BUILD_NUMBER} .'
                             sh "docker push amarnathvenkatam/backend:${BUILD_NUMBER}"
                             sh "docker rmi amarnathvenkatam/backend:${BUILD_NUMBER}"
@@ -91,7 +84,7 @@ pipeline {
             steps {
                 script {
                     dir('k8s_files/Backend') {
-                        withCredentials([string(credentialsId: 'GIT_USER_NAME', variable: 'GITHUB_TOKEN')]) {
+                        withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
                         sh '''
                             git config user.email "mvenkatamarnathgmail.com"
                             git config user.name "Venkata amarnath"
@@ -100,9 +93,8 @@ pipeline {
                             sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" /root/.jenkins/workspace/end-to-end-devops-ci/k8s_manifests/backend-deployment.yaml
                             git add /root/.jenkins/workspace/end-to-end-devops-ci/k8s_manifests
                             git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                            git remote remove origin 
-                            git remote add origin https://github.com/amarss321/TWSThreeTierAppChallenge.git
                             git push https://${GITHUB_TOKEN}@github.com/amarss321/TWSThreeTierAppChallenge.git HEAD:main
+                            
                         '''   
                         }
                     }
