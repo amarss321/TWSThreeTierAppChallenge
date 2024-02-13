@@ -1,3 +1,4 @@
+#https://medium.com/@sushantkapare1717/ci-cd-3-tier-todo-application-f92a8d63172a refer that artical.
 #!/bin/bash
 # For Ubuntu 22.04
 # Intsalling Java
